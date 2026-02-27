@@ -7,10 +7,12 @@ int main() {
     int userDat2;
     int Result;
     int opciones;
+    int Salir;
+    int valor = opciones;
 
-    int condicion = true;
+    bool condicion = true;
 
-    bool cont = 3;
+    //int cont = 3;
     bool valorcorrecto;
 
     do
@@ -21,6 +23,7 @@ int main() {
         cout <<"2: Resta"<<endl;
         cout <<"3: Multiplicacion"<<endl;
         cout <<"4: Division"<<endl;
+        cout <<"5: Salir"<<endl;
         cin >> opciones;
 
         cout <<"Ingrese su primer valor"<< endl;
@@ -28,14 +31,15 @@ int main() {
         cout <<"Ingrese su segundo valor"<< endl;
         cin >> userDat2;
 
-        cont -1;
-        if ( condicion == 0){ 
-                condicion = false;
-        }
+        //cont --;
+        //if ( cont == 0){ 
+        //        condicion = false;
+        //}
 
-    valorcorrecto = userDat1 > userDat2;
+        //valorcorrecto = userDat1 > userDat2;
 
-    if ( valorcorrecto) {
+        //if ( valorcorrecto) {
+        
     switch (opciones)
 
     {
@@ -65,17 +69,18 @@ int main() {
         }    
         break;
 
+        case 5: 
+            cout<<"Saliendo..."<<endl;
+            condicion = false;
+        break;
+
         default:
         cout<<"Operacion errada";
             break;
 
-    }}
-    else {
-        cout <<"El PRIMER VALOR ES MENOR QUE EL SEGUNDO, VUELVA A INGRSAR UN DATO MAYOR";
     }
-     
 
-    } while (condicion == false);
+    } while (condicion);
         cout<<"Gracias por trabajar con nostros";
 
     return 0;
