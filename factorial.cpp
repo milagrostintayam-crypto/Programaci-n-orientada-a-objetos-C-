@@ -6,7 +6,7 @@ int main() {
     int datUser;
     int Result = 1;
     while (true) {
-        cout<<"Bienvenido"<<endl;
+    cout<<"Bienvenido"<<endl;
     cout<<"Ingrese su numero: "<<endl;
     cin>>datUser;
 
