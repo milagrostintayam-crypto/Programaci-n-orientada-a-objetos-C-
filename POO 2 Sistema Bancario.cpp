@@ -5,19 +5,20 @@ using namespace std;
 int menu ();
 
 class CuentadeBanco {
+    protected:
+    // atributos
+        float Saldo = 0.00; //el saldo es un dato que no puede ser modificado por el usuario u otro por lo que debe de ser un dato private.
     private:
     // atributos
         string Clave = "1234";//El uso de encapsulamiento; proteger los datos imp.
         //string Titular;
-        float Saldo = 0.00;//el saldo es un dato que no puede ser modificado por el usuario u otro por lo que debe de ser un dato private.
-
     public:
     // atributos
     string Titular;
     // metodos
         bool Acceso () { // while ; caso mas rappidos
             for (int i = 0; i < 3; i++) {
-                cout<<Titular<<" ingrese su contraseña: "<< endl;
+                cout<<Titular<<" Ingrese su contraseña: ";
                 cin>>Clave;
                 if ( Clave == "1234" ) {
                     i = 3;
@@ -35,36 +36,38 @@ class CuentadeBanco {
         }
 
         void MostarSaldo () {
-            cout<<Saldo<<endl;
+            cout<<"Saldo actual: "<<getsaldo()<<endl;
         }
 
-        void Depositardinero (float deposito) {// es un seter
-            float setdinero = 0.00;
-            
-            Saldo += deposito; 
-            cout<<Saldo<<" Saldo actual "<<endl;
+        float getsaldo () { // get devuelve el valor del atributo
+            return Saldo;
         }
 
-        void Retirardinero () {// es un geter
+        void Depositardinero (float deposito) {// no puedo usar un set debido a que mis datos deben de guardarse con la anterior operacion; saldo != nuevo saldo
+            cout<<"Ingrese el monto a depositar: ";
+            cin>>deposito;
+             if ( deposito > 0) {
+                Saldo += deposito;
+                cout<<"Monto actual de Cuenta de banco:"<<Saldo<<endl;
+            } else {
+                cout<<"Monto invalido"<<endl;
+            }
+        }
+
+        virtual void Retirardinero () {// es un geter
             float retiro;
 
-            cout<<"Ingrese el monto"<<endl;//obs: numeros negativos no son validos; realizar una funcion de pedir monto
+            cout<<"Ingrese el monto: ";//obs: numeros negativos no son validos; realizar una funcion de pedir monto
             cin>>retiro;
-            if ( retiro <= Saldo) {
+            if ( retiro <= Saldo && retiro > 0) {
                 Saldo -= retiro;
+                cout<<"Monto actual de Cuenta de banco:"<<Saldo<<endl;
             } else {
                 cout<<"Monto invalido"<<endl;
             }
         }
          
-        void setSaldo (float Saldonuevo) {
-            Saldo = Saldonuevo;
-        }
         
-        float getSaldo () {
-            cout<<"Su saldo es: "<<Saldo<<endl;
-            return Saldo;
-        }
 
 };
 
@@ -75,32 +78,39 @@ class cuentaCredito : public CuentadeBanco { // COMO USAR BIEN EL POLIMORFISMO;
 
     public:
     // metodos
-        virtual void Retirardinero() {
+        void Retirardinero() override {
             float retiro;
-            float Saldo = getSaldo();
+            //CuentadeBanco::Retirardinero();//llamado del metodo del padre con la funcion
 
-            cout<<"Ingrese el monto"<<endl;
+            cout<<"Ingrese el monto: ";
             cin>>retiro;
 
-            if (retiro <= CreditoMax) {
+            if (retiro <= CreditoMax && retiro > 0) {
                 CreditoMax -= retiro;
-            }
-            cout<<CreditoMax<<endl;
+                cout<<" El credito restante es: "<<CreditoMax<<endl;
+            } else {
+                cout<<"Moto invalido, vuelva a intentar"<<endl;
+            } 
         }
 };
-
 
 
 int main() {
 
     bool condicion;
     float Saldo;
+    int opciones;
 
     cuentaCredito CuentDiana; // creamos un objeto
+    CuentadeBanco* cuenta = &CuentDiana;
+
+    
     cuentaCredito CuentMaria; // creamos otro objeto
 
-    cout<<" MENU BANCO"<<endl;
-    cout<<" Ingrese su nombre de usuario: "<<endl;
+    cout<<"-----------------------------------"<<endl;
+    cout<<"            MENU BANCO             "<<endl;
+    cout<<"-----------------------------------"<<endl;
+    cout<<"Ingrese su nombre de usuario: "<<endl;
     CuentDiana.Titular = "Diana"; // asignamos un valor
     cin>>CuentDiana.Titular;
     condicion = CuentDiana.Acceso();// se guarda lo que va a RETORNAR EL METODO ; LUEGO DE TRES INTENTOS DE EERORES FALLIDOS; EL PROGRAMA NO DEBE CONTINUAR 
@@ -110,13 +120,22 @@ int main() {
         switch (opc)
         {
         case 1://DEPOSITAR DINERO
-            cout<<"Ingrese monto:"<<endl;//condicional
-            cin>>Saldo;
-            CuentDiana.setSaldo(Saldo);
-            break;
-        case 2://RETIRAR DINERO
-            CuentDiana.Retirardinero(); //COMO LLAMAR LA FUNCION RETIRAR DINERO DE LA CLASE HIJO Y CLASE PADRE?
-            break;
+            CuentDiana.Depositardinero(Saldo);
+            break; 
+        case 2://RETIRAR DINERO LA OPCION DEBE VERIFICAR SI QUIERE RETIRAR DE CUENTACREDITO Y CUENTA PADRE
+                cout<<" Eliga la opcion"<<endl;
+                cout<<" 1: Retirardinero de cuenta de Credito;\n 2: Retirar dinero de cuenta de banco"<<endl;
+                cout<<"Opcion: ";
+                cin>>opciones;
+                if (opciones == 1) { //pude realizar el uso de while; para el break = continue
+                    cuenta->Retirardinero();//COMO LLAMAR LA FUNCION RETIRAR DINERO DE LA CLASE HIJO Y CLASE PADRE?
+                    continue;
+                } else if (opciones == 2) {
+                    CuentDiana.CuentadeBanco::Retirardinero();
+                    continue; //detener la iteración actual del bucle y volver al inicio
+                } else {
+                    cout<<"Dato invalido"<<endl;
+                }
         case 3://MOSTRAR SALDO
             CuentDiana.MostarSaldo();//TRABAJAR CON GETER
             break;
@@ -133,8 +152,11 @@ int main() {
 
 int menu () {
     int opciones;
-    cout <<"Ingrese su opcion"<<endl;
-    cout <<"\n1: Depositardinero();\n2: Retirardinero();\n3: MostarSaldo();\n4: Salir\n"<<endl;
+    cout<<"-----------------------------------"<<endl;
+    cout <<"Ingrese su opcion";
+    cout <<"\n1: Depositar dinero en cuenta de banco\n2: Retirar dinero\n3: Mostar Saldo  en cuenta de banco\n4: Salir"<<endl;
+    cout<<"-----------------------------------"<<endl;
+    cout<<"OPCION: ";
     cin>>opciones;
     return opciones;
 }
