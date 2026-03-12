@@ -6,7 +6,6 @@ void cambio (char* p){ //mi funcion recibe una direccion de memoria, un puntero 
 }
 int main() {
     char userName[50]= "Diana";
-    //int lista[100];
     //int z = x; esto es un uso de memoria excesivo
     //char* a = &userName[4]; // a es un puntero a un caracter, que apunta a Username
     //cambio(a);//llamado a la funcion

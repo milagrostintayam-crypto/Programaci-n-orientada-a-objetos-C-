@@ -4,9 +4,9 @@
 using namespace std;
 int menu ();
 
-class CuentadeBanco {
+class CuentadeBanco { //es una plantilla y/o 
     protected:
-    // atributos
+    // atributos caraacteristica o propiedad
         float Saldo = 0.00; //el saldo es un dato que no puede ser modificado por el usuario u otro por lo que debe de ser un dato private.
     private:
     // atributos
@@ -15,7 +15,7 @@ class CuentadeBanco {
     public:
     // atributos
     string Titular;
-    // metodos
+    // metodos es una funcion de la clase
         bool Acceso () { // while ; caso mas rappidos
             for (int i = 0; i < 3; i++) {
                 cout<<Titular<<" Ingrese su contraseña: ";
@@ -35,7 +35,7 @@ class CuentadeBanco {
             return false;
         }
 
-        void MostarSaldo () {
+        void MostarSaldo () { // ver cual es mas conveniente; una estructura mas funcional; unificar
             cout<<"Saldo actual: "<<getsaldo()<<endl;
         }
 
@@ -54,7 +54,7 @@ class CuentadeBanco {
             }
         }
 
-        virtual void Retirardinero () {// es un geter
+        virtual void Retirardinero () {// es un geter //el usuario solo ve el resultado; pero no la funcionalidad.ocultando
             float retiro;
 
             cout<<"Ingrese el monto: ";//obs: numeros negativos no son validos; realizar una funcion de pedir monto
@@ -94,14 +94,35 @@ class cuentaCredito : public CuentadeBanco { // COMO USAR BIEN EL POLIMORFISMO;
         }
 };
 
+class cuentaAhorro : public CuentadeBanco { // COMO USAR BIEN EL POLIMORFISMO; 
+    public:
+    // metodos
+        void Retirardinero() override {
+            float retiro;
+
+            cout<<"Ingrese el monto: ";
+            cin>>retiro;
+
+            if (retiro <= Saldo && retiro > 0) {
+                Saldo -= retiro;
+                cout<<" El Saldo restante es: "<<Saldo<<endl;
+            } else {
+                cout<<"Moto invalido, vuelva a intentar"<<endl;
+            } 
+        }
+};
+
 
 int main() {
 
     bool condicion;
     float Saldo;
     int opciones;
+    int totalaccount = 0;
 
-    cuentaCredito CuentDiana; // creamos un objeto
+
+
+    cuentaCredito CuentDiana; // creamos un objeto; es una instancia de una clase; copia la plantilla  al objeto
     CuentadeBanco* cuenta = &CuentDiana;
 
     
@@ -150,7 +171,7 @@ int main() {
     } 
 }
 
-int menu () {
+int menu () { //menu de banco de ahorro
     int opciones;
     cout<<"-----------------------------------"<<endl;
     cout <<"Ingrese su opcion";
@@ -159,4 +180,12 @@ int menu () {
     cout<<"OPCION: ";
     cin>>opciones;
     return opciones;
+}
+
+int accountcreation () { //creacion de cuenta
+    int tipeaccount;
+    cout<<"-----------------------------------"<<endl;
+    cout<<"Ingrese su opcion de cuenta: ";
+    cout<<"\n1: Cuenta de banco\n2: Cuenta de ahorro"<<endl;
+    cin>>tipeaccount;    
 }
