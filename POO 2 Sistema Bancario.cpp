@@ -118,23 +118,40 @@ int main() {
     bool condicion;
     float Saldo;
     int opciones;
+    int tipeaccount;
     int totalaccount = 0;
+    //int cuentas[2];
 
-
-
-    cuentaCredito CuentDiana; // creamos un objeto; es una instancia de una clase; copia la plantilla  al objeto
-    CuentadeBanco* cuenta = &CuentDiana;
-
-    
-    cuentaCredito CuentMaria; // creamos otro objeto
+    //int* puntero = &cuentas
+    //cuentaCredito CuentDiana; // creamos un objeto; es una instancia de una clase; copia la plantilla  al objeto
+    CuentadeBanco* cuentas[2] = {nullptr, nullptr}; //usamos mi clase padre para apuntar al arreglo que tiene por capacidad 10 elementos
+    //sin embargo aun no se creo ningun objeto; estas "cuentas" estan vacias.
 
     cout<<"-----------------------------------"<<endl;
     cout<<"            MENU BANCO             "<<endl;
     cout<<"-----------------------------------"<<endl;
-    cout<<"Ingrese su nombre de usuario: "<<endl;
-    CuentDiana.Titular = "Diana"; // asignamos un valor
-    cin>>CuentDiana.Titular;
-    condicion = CuentDiana.Acceso();// se guarda lo que va a RETORNAR EL METODO ; LUEGO DE TRES INTENTOS DE EERORES FALLIDOS; EL PROGRAMA NO DEBE CONTINUAR 
+    for (int i=0; i<2; i++) {
+        if ( cuentas[i] == nullptr ) { //como se identifica un valor vacio en un arreglo
+            cout<<"Ingrese su opcion de cuenta: ";
+            cout<<"\n1: Cuenta de banco\n2: Cuenta de ahorro"<<endl;
+            cin>>tipeaccount;
+            if (tipeaccount == 1) {
+                cuentas [i] = new (cuentaAhorro);
+                cout<<"Creacion exitosa"<<endl;
+                cout<<"-----------------------------------"<<endl;
+                cout<<"Cuenta de Ahorro";
+            } else {
+                cuentas [i] = new (cuentaCredito);
+                cout<<"Creacion exitosa"<<endl;
+                cout<<"-----------------------------------"<<endl;
+                cout<<"Cuenta de Credito";
+            }
+            cout<<"Ingrese su nombre de usuario: ";
+            cin>> cuentas [i]-> Titular; // asignamos un valor
+        } 
+    }
+    //cuentas [i]-> Titular = "Diana"; // asignamos un valor
+    condicion = accountcreation->Acceso();// se guarda lo que va a RETORNAR EL METODO ; LUEGO DE TRES INTENTOS DE EERORES FALLIDOS; EL PROGRAMA NO DEBE CONTINUAR 
 
     while (condicion) {
         int opc = menu ();
@@ -180,12 +197,4 @@ int menu () { //menu de banco de ahorro
     cout<<"OPCION: ";
     cin>>opciones;
     return opciones;
-}
-
-int accountcreation () { //creacion de cuenta
-    int tipeaccount;
-    cout<<"-----------------------------------"<<endl;
-    cout<<"Ingrese su opcion de cuenta: ";
-    cout<<"\n1: Cuenta de banco\n2: Cuenta de ahorro"<<endl;
-    cin>>tipeaccount;    
 }
